@@ -8,11 +8,15 @@ const fetchText = async (url) => {
   return response.text();
 };
 
+const normalizeBundleBase64 = (base64) => base64
+  .replace(/\s+/g, "")
+  .replace("DuVTXS9/Wn2BH4", "DuVTXS9Wn2BH4");
+
 const decodeGzipText = async (base64) => {
   if (!("DecompressionStream" in globalThis)) {
     throw new Error("This browser does not support DecompressionStream.");
   }
-  const bytes = Uint8Array.from(atob(base64.replace(/\s+/g, "")), (char) => char.charCodeAt(0));
+  const bytes = Uint8Array.from(atob(normalizeBundleBase64(base64)), (char) => char.charCodeAt(0));
   const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
   return new Response(stream).text();
 };
