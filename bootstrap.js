@@ -1,9 +1,9 @@
-const chunkFiles = ["./chunks/app.000.txt","./chunks/app.001.txt","./chunks/app.002.txt","./chunks/app.003.txt","./chunks/app.004.txt","./chunks/app.005.txt","./chunks/app.006.txt","./chunks/app.007.txt","./chunks/app.008.txt","./chunks/app.009.txt","./chunks/app.010.txt","./chunks/app.011.txt","./chunks/app.012.txt"];
-const source = (await Promise.all(chunkFiles.map(async (file) => {
-  const response = await fetch(file);
-  if (!response.ok) throw new Error(`Failed to load ${file}: ${response.status}`);
-  return response.text();
-}))).join("");
+const response = await fetch("./app.js.gz.b64");
+if (!response.ok) throw new Error(`Failed to load simulator bundle: ${response.status}`);
+const base64 = (await response.text()).replace(/\s+/g, "");
+const compressed = Uint8Array.from(atob(base64), (char) => char.charCodeAt(0));
+const stream = new Blob([compressed]).stream().pipeThrough(new DecompressionStream("gzip"));
+const source = await new Response(stream).text();
 const moduleUrl = URL.createObjectURL(new Blob([source], { type: "text/javascript" }));
 await import(moduleUrl);
 URL.revokeObjectURL(moduleUrl);
