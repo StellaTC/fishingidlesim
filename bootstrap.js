@@ -1,9 +1,14 @@
-const response = await fetch("./app.js.gz.b64");
+const sourceUrl = "https://raw.githubusercontent.com/StellaTC/fishingidlesim/04521fa0f4061fad3cb0f9c6ca0cd1484f7a9b12/app.js.gz.b64";
+const response = await fetch(sourceUrl, { cache: "no-store" });
 if (!response.ok) throw new Error(`Failed to load simulator bundle: ${response.status}`);
 const base64 = (await response.text()).replace(/\s+/g, "");
 const compressed = Uint8Array.from(atob(base64), (char) => char.charCodeAt(0));
 const stream = new Blob([compressed]).stream().pipeThrough(new DecompressionStream("gzip"));
-const source = await new Response(stream).text();
+let source = await new Response(stream).text();
+const originalStrength = 'function C(e,t,a,r,n){let s=u(e,.01,.98),i=1-s;for(let l of[r,n].filter(Boolean))l.id==="fist"?(s=u((1-i)*ct,.01,.98),i=1-s):a.chance(u(l.accuracy,0,100)/100)&&(i*=1-Nt(l,t));return u(1-i,.01,.98)}';
+const cappedStrength = 'function C(e,t,a,r,n){let s=u(e,0,.98),i=1-s;for(let l of[r,n].filter(Boolean))l.id==="fist"?(s=u((1-i)*ct,0,.98),i=1-s):a.chance(u(l.accuracy,0,100)/100)&&(i*=1-Nt(l,t));return u(1-i,0,Math.min(.98,s*2))}';
+if (!source.includes(originalStrength)) throw new Error("Failed to patch strength chance cap");
+source = source.replace(originalStrength, cappedStrength);
 const moduleUrl = URL.createObjectURL(new Blob([source], { type: "text/javascript" }));
 await import(moduleUrl);
 URL.revokeObjectURL(moduleUrl);
