@@ -2,22 +2,22 @@
 
 《闲者上钩》装备系统 v27 调参用静态模拟器。
 
-## 本地运行
+线上地址：<https://stellatc.github.io/fishingidlesim/>
 
-这个工具是纯静态页面，可以直接打开 `index.html`，也可以用任意静态服务器预览：
+## 当前发布内容
+
+这个仓库发布的是可直接托管到 GitHub Pages 的静态构建产物：
+
+- `index.html`：页面结构
+- `styles.css`：样式
+- `bootstrap.js`：加载压缩后的模拟器脚本
+- `app.js.gz.b64`：模拟器脚本压缩包
+- `.github/workflows/pages.yml`：GitHub Pages 自动部署
+
+## 本地预览
 
 ```sh
 python3 -m http.server 4177
 ```
 
 然后访问 `http://127.0.0.1:4177/`。
-
-## 校验
-
-```sh
-node smoke.mjs
-```
-
-## GitHub Pages
-
-仓库推到 GitHub 后，`.github/workflows/pages.yml` 会把当前目录发布为 GitHub Pages 站点。
