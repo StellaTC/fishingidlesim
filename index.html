@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>装备数值模拟器</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="app" class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">内部本地工具</p>
+          <h1>装备数值模拟器</h1>
+        </div>
+        <div class="topbar-controls">
+          <label>
+            模拟轮数
+            <input id="runsInput" type="number" min="1" max="120" value="24" />
+          </label>
+          <label>
+            时长/轮
+            <input id="hoursInput" type="number" min="1" max="168" value="72" />
+          </label>
+          <label class="wide">
+            Seeds
+            <input id="seedsInput" value="sim-a,sim-b,sim-c" />
+          </label>
+          <button id="runButton" type="button">运行模拟</button>
+        </div>
+      </header>
+
+      <section class="progress-wrap" id="progressWrap" aria-live="polite">
+        <div class="progress-meta">
+          <span id="progressLabel">等待模拟</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+      </section>
+
+      <section class="baseline-strip" id="summaryCards"></section>
+
+      <section class="preset-bar">
+        <label>
+          方案
+          <select id="presetSelect"></select>
+        </label>
+        <label class="wide">
+          方案名
+          <input id="presetNameInput" value="87件 catalog 对抗微调版 v26" />
+        </label>
+        <button id="savePresetButton" type="button">保存方案</button>
+        <button id="deletePresetButton" type="button">删除方案</button>
+      </section>
+
+      <div class="workspace">
+        <aside class="panel templates-panel">
+          <div class="panel-heading">
+            <h2>大类模板</h2>
+            <button id="resetTemplatesButton" type="button">重置</button>
+          </div>
+          <div id="templateList" class="template-list"></div>
+        </aside>
+
+        <section class="panel weapons-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>武器表</h2>
+              <p id="weaponCountLabel"></p>
+            </div>
+            <div class="button-row">
+              <button id="exportWeaponsJsonButton" type="button">导出武器 JSON</button>
+              <button id="exportWeaponsCsvButton" type="button">导出武器 CSV</button>
+            </div>
+          </div>
+          <div class="loadout-bar">
+            <label>
+              钓具
+              <select id="tackleSelect"></select>
+            </label>
+            <label>
+              捕具
+              <select id="captureSelect"></select>
+            </label>
+            <label>
+              过滤
+              <select id="familyFilter"></select>
+            </label>
+          </div>
+          <div class="table-wrap">
+            <table id="weaponTable">
+              <thead>
+                <tr>
+                  <th>装备</th>
+                  <th>大类</th>
+                  <th>层级</th>
+                  <th>频率</th>
+                  <th>强度区间</th>
+                  <th>命中区间</th>
+                  <th>品质</th>
+                  <th>连钓/休息</th>
+                  <th>商店</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <aside class="panel results-panel">
+          <div class="panel-heading">
+            <h2>结果矩阵</h2>
+            <div class="button-row">
+              <button id="exportResultsCsvButton" type="button">导出结果 CSV</button>
+              <button id="exportFailuresButton" type="button">导出失败摘要</button>
+            </div>
+          </div>
+          <div id="loadoutCard" class="loadout-card"></div>
+          <div id="resultMatrix" class="result-matrix"></div>
+        </aside>
+      </div>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
